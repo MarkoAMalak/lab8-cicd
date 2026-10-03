@@ -1,6 +1,9 @@
 version: '3'
 services:
   app:
+    # CI pushes this image; on EC2 `docker-compose pull` fetches the latest build.
+    # Locally, `docker-compose up --build` builds it from the Dockerfile instead.
+    image: ${DOCKERHUB_USERNAME:-local}/lab6-app:latest
     build: .
     ports:
       - "3000:3000"

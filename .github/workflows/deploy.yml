@@ -37,15 +37,18 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # الانتقال لمجلد المشروع على EC2 [cite: 46]
+            # الانتقال لمجلد المشروع على EC2
             cd ~/lab8-cicd
             
-            # جلب آخر التحديثات لملف docker-compose.yml [cite: 47, 52]
+            # جلب آخر التحديثات لملف docker-compose.yml
             git pull
+
+            # docker-compose reads .env, so the app service uses the image CI just pushed
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             
-            # جلب أحدث صورة تم رفعها لـ Docker Hub [cite: 48, 53]
+            # جلب أحدث صورة تم رفعها لـ Docker Hub
             sudo docker-compose pull
             
-            # إيقاف الحاويات القديمة وتشغيل Stack الجديد [cite: 49, 50, 53]
+            # إيقاف الحاويات القديمة وتشغيل Stack الجديد
             sudo docker-compose down
             sudo docker-compose up -d
